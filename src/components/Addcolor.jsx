@@ -1,15 +1,15 @@
-export const AddcolorChanger = ({color}) => {
+export const ChangeColor = ({colors}) => {
     const buttonStyle = {
-        background: color === 'primary' ? 'blue' : 'red',
+        backgroundColor: colors === 'primary' ? 'blue' : 'red',
         color: 'white',
-        margin: '20px' ,
-        padding:'10px 20px',
-        borderRadius: '5px'
+        margine: '20px',
+        padding: '20px',
+        border: 'none'
     };
 
     return <>
-        <button style={buttonStyle}>
-            button {color === 'primary' ? 'blue' : 'rouge'}
+        <button style={buttonStyle} >
+            click for change color
         </button>
     </>
 }

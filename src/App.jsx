@@ -1,15 +1,42 @@
-import { useState } from 'react'
-import { AddcolorChanger } from './components/Addcolor'
+
+import { useState } from "react";
+
 const App = () => {
-  const [colorMode, setColorMode] = useState('primary')
+  const [count, setCount] = useState(0);
+  const [colorMode, setColorMode] = useState("firstColor");
 
-  return <>
-    <div>
-      <h1>Change color</h1>
-      <button onClick={() => setColorMode(prev => prev === 'primary' ? 'secondary' : 'primary')}>Change</button>
-      <AddcolorChanger color={colorMode}/>
-    </div>
-  </>
-}
+  const Increment = () => {
+    setCount(count + 1);
 
-export default App
+    setColorMode((e) =>
+      e === "firstColor" ? "secondColor" : "firstColor"
+    );
+  };
+
+  const ChangeColor = ({ color }) => {
+    const ButtonStyle = {
+      background: color === "firstColor" ? "blue" : "red",
+      color: "white",
+      padding: "20px",
+      margin: "30px",
+      border: "none",
+    };
+
+    return (
+      <button style={ButtonStyle}>
+        Nombre de clics : {count}
+      </button>
+    );
+  };
+
+  return (
+    <>
+      <button onClick={Increment}>Click</button>
+
+      <ChangeColor color={colorMode} />
+    </>
+  );
+};
+
+export default App;
+
