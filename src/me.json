@@ -1,0 +1,8 @@
+[
+  {"id":1,"nom":"Muapul" , "prenom":"Alan","age":20,"sexe":"M"},
+  {"id":2,"nom":"Banks" , "prenom":"Sarah","age":"?","sexe":"F"},
+  {"id":3,"nom":"Kalipha" , "prenom":"Miah","age":37,"sexe":"F"},
+  {"id":4,"nom":"Noire" , "prenom":"Kira","age":35,"sexe":"F"},
+  {"id":5,"nom":"Fox" , "prenom":"Sweetie","age":27,"sexe":"F"},
+  {"id":6,"nom":"Alice","prenom":"Bong","age":18,"sexe":"F"}
+]

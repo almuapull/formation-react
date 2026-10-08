@@ -1,42 +1,92 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
-  const [count, setCount] = useState(0);
-  const [colorMode, setColorMode] = useState("firstColor");
+    const [todos, setTodos] = useState([]);
+    const [title, setTitle] = useState("");
 
-  const Increment = () => {
-    setCount(count + 1);
+    const addTodo = async () => {
+        const requete = await fetch(
+            "https://jsonplaceholder.typicode.com/todos"
+        );
 
-    setColorMode((e) =>
-      e === "firstColor" ? "secondColor" : "firstColor"
-    );
-  };
+        const reponse = await requete.json();
 
-  const ChangeColor = ({ color }) => {
-    const ButtonStyle = {
-      background: color === "firstColor" ? "blue" : "red",
-      color: "white",
-      padding: "20px",
-      margin: "30px",
-      border: "none",
+        setTodos(reponse);
     };
 
+    const creaTodo = async (e) => {
+        e.preventDefault();
+
+        const requete = await fetch(
+            "https://jsonplaceholder.typicode.com/todos",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    userId: 1,
+                    title: title,
+                    completed: false,
+                }),
+            }
+        );
+
+        const reponse = await requete.json();
+
+        const nouveauTodo = {
+            id: reponse.id,
+            userId: 1,
+            title: title,
+            completed: false,
+        };
+
+        setTodos([...todos, nouveauTodo]);
+
+        setTitle("");
+    };
+
+    const deleteTodo = async (id) => {
+        await fetch(
+            `https://jsonplaceholder.typicode.com/todos/${id}`,
+            {
+                method: "DELETE",
+            }
+        );
+
+        setTodos(todos.filter((todo) => todo.id !== id));
+    };
+
+    useEffect(() => {
+        addTodo();
+    }, []);
+
     return (
-      <button style={ButtonStyle}>
-        Nombre de clics : {count}
-      </button>
+        <div>
+            <form onSubmit={creaTodo}>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+
+                <button type="submit">
+                    Ajouter
+                </button>
+            </form>
+
+            <div>
+                {todos.map((todo) => (
+                    <div key={todo.id}>
+                        <h1 style={{ color: "red" }}>
+                            {todo.title}
+                        </h1>
+
+                        <button onClick={() => deleteTodo(todo.id)}>
+                            Supprimer
+                        </button>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
-  };
-
-  return (
-    <>
-      <button onClick={Increment}>Click</button>
-
-      <ChangeColor color={colorMode} />
-    </>
-  );
 };
 
 export default App;
-
