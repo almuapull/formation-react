@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 const App = () => {
     const [todos, setTodos] = useState([]);
     const [title, setTitle] = useState("");
-    const isTrue = todos.filter((todo) => todo.completed);
-    const isFalse = todos.filter((todo) => !todo.completed);
 
     const addTodo = async () => {
         const requete = await fetch(
@@ -56,17 +54,6 @@ const App = () => {
         setTodos(todos.filter((todo) => todo.id !== id));
     };
 
-    const changeTodo = async (id, completed) =>{
-        await fetch(`https://jsonplaceholder.typicode.com/todos/${id}` , {
-            method : "PATCH",
-            body: JSON.stringify({
-                completed: completed,
-            })
-        })
-        
-        setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed } : todo)));
-    }
-
     useEffect(() => {
         addTodo();
     }, []);
@@ -88,14 +75,12 @@ const App = () => {
             <div>
                 {todos.map((todo) => (
                     <div key={todo.id}>
-                        {todo.completed ? <h1 style={{ color: "green" }}>{todo.title}</h1> : <h1 style={{ color: "red" }}>{todo.title}</h1>}
+                        <h1 style={{ color: "red" }}>
+                            {todo.title}
+                        </h1>
 
                         <button onClick={() => deleteTodo(todo.id)}>
                             Supprimer
-                        </button>
-                        
-                        <button onClick={() => changeTodo(todo.id, true)}>
-                            Marquer comme terminé
                         </button>
                     </div>
                 ))}
