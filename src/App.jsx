@@ -1,92 +1,45 @@
-import { useEffect, useState } from "react";
+import { useReducer } from "react";
 
-const App = () => {
-    const [todos, setTodos] = useState([]);
-    const [title, setTitle] = useState("");
+function reducer(state, action) {
+    switch (action.type) {
+        case "AJOUTER":
+            return state + action.montant;
 
-    const addTodo = async () => {
-        const requete = await fetch(
-            "https://jsonplaceholder.typicode.com/todos"
-        );
+        case "RETIRER":
+            return state - action.montant;
 
-        const reponse = await requete.json();
+        case "DOUBLE":
+            return state * action.montant;
 
-        setTodos(reponse);
-    };
+        case "RESET":
+            return 0;
 
-    const creaTodo = async (e) => {
-        e.preventDefault();
+        default:
+            return state;
+    }
+}
 
-        const requete = await fetch(
-            "https://jsonplaceholder.typicode.com/todos",
-            {
-                method: "POST",
-                body: JSON.stringify({
-                    userId: 1,
-                    title: title,
-                    completed: false,
-                }),
-            }
-        );
-
-        const reponse = await requete.json();
-
-        const nouveauTodo = {
-            id: reponse.id,
-            userId: 1,
-            title: title,
-            completed: false,
-        };
-
-        setTodos([...todos, nouveauTodo]);
-
-        setTitle("");
-    };
-
-    const deleteTodo = async (id) => {
-        await fetch(
-            `https://jsonplaceholder.typicode.com/todos/${id}`,
-            {
-                method: "DELETE",
-            }
-        );
-
-        setTodos(todos.filter((todo) => todo.id !== id));
-    };
-
-    useEffect(() => {
-        addTodo();
-    }, []);
+function App() {
+    const [solde, dispatch] = useReducer(reducer, 100);
 
     return (
         <div>
-            <form onSubmit={creaTodo}>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+            <h1>Solde : {solde} $</h1>
 
-                <button type="submit">
-                    Ajouter
-                </button>
-            </form>
+            <button onClick={() => dispatch({ type: "AJOUTER", montant: 20 })}>
+                Ajouter 20 $
+            </button>
 
-            <div>
-                {todos.map((todo) => (
-                    <div key={todo.id}>
-                        <h1 style={{ color: "red" }}>
-                            {todo.title}
-                        </h1>
+            <button onClick={() => dispatch({ type: "RETIRER", montant: 30 })}>
+                Retirer 30 $
+            </button>
+            <button onClick={() => dispatch({type: "DOUBLE" , montant: 2})}>DOUBLE</button>
 
-                        <button onClick={() => deleteTodo(todo.id)}>
-                            Supprimer
-                        </button>
-                    </div>
-                ))}
-            </div>
+            <button onClick={() => dispatch({ type: "RESET" })}>
+                Réinitialiser
+            </button>
         </div>
     );
-};
+}
 
 export default App;
