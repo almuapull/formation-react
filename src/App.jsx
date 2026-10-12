@@ -1,45 +1,36 @@
-import { useReducer } from "react";
-
-function reducer(state, action) {
-    switch (action.type) {
-        case "AJOUTER":
-            return state + action.montant;
-
-        case "RETIRER":
-            return state - action.montant;
-
-        case "DOUBLE":
-            return state * action.montant;
-
-        case "RESET":
-            return 0;
-
-        default:
-            return state;
-    }
-}
+import { useState , useMemo } from "react";
 
 function App() {
-    const [solde, dispatch] = useReducer(reducer, 100);
+  const [prix, setPrix] = useState(100);
+  const [quantite, setQuantite] = useState(2);
+  const [compteur, setCompteur] = useState(0);
 
-    return (
-        <div>
-            <h1>Solde : {solde} $</h1>
+  const total = useMemo(() => {
+    console.log("Calcul du total");
+    return prix * quantite;
+  }, [prix, quantite]); 
 
-            <button onClick={() => dispatch({ type: "AJOUTER", montant: 20 })}>
-                Ajouter 20 $
-            </button>
+  return (
+    <div>
+      <h2>Commande</h2>
 
-            <button onClick={() => dispatch({ type: "RETIRER", montant: 30 })}>
-                Retirer 30 $
-            </button>
-            <button onClick={() => dispatch({type: "DOUBLE" , montant: 2})}>DOUBLE</button>
+      <p>Prix unitaire : {prix} $</p>
+      <p>Quantité : {quantite}</p>
+      <p>Total : {total} $</p>
 
-            <button onClick={() => dispatch({ type: "RESET" })}>
-                Réinitialiser
-            </button>
-        </div>
-    );
+      <button onClick={() => setPrix(prix + 10)}>
+        Augmenter le prix
+      </button>
+
+      <button onClick={() => setQuantite(quantite + 1)}>
+        Ajouter un produit
+      </button>
+
+      <button onClick={() => setCompteur(compteur + 1)}>
+        Compteur : {compteur}
+      </button>
+    </div>
+  );
 }
 
 export default App;
