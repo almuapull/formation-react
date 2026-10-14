@@ -1,34 +1,23 @@
-import { useState , useMemo } from "react";
+import {useState} from 'react';
 
-function App() {
-  const [prix, setPrix] = useState(100);
-  const [quantite, setQuantite] = useState(2);
-  const [compteur, setCompteur] = useState(0);
+const useCounter = (initialValue = 0) => {
+  const [count, setCount] = useState(initialValue);
+  const increment = () => setCount(Math.min(count + 1, 10)); // Limit to a maximum of 10
+  const decrement = () => setCount(Math.max(count - 1, 0)); // Limit to a minimum of 0
+  const reset = () => setCount(initialValue);
 
-  const total = useMemo(() => {
-    console.log("Calcul du total");
-    return prix * quantite;
-  }, [prix, quantite]); 
+  return { count, increment, decrement, reset };
+};
+
+const App = () => {
+  const { count, increment, decrement, reset } = useCounter(0);
 
   return (
     <div>
-      <h2>Commande</h2>
-
-      <p>Prix unitaire : {prix} $</p>
-      <p>Quantité : {quantite}</p>
-      <p>Total : {total} $</p>
-
-      <button onClick={() => setPrix(prix + 10)}>
-        Augmenter le prix
-      </button>
-
-      <button onClick={() => setQuantite(quantite + 1)}>
-        Ajouter un produit
-      </button>
-
-      <button onClick={() => setCompteur(compteur + 1)}>
-        Compteur : {compteur}
-      </button>
+      <h1>Counter: {count}</h1>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+      <button onClick={reset}>Reset</button>
     </div>
   );
 }
